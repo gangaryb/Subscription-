@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GIS Intelligence Platform - Subscription Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    html,body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    
+    .glass {
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .gradient-text { 
+      background: linear-gradient(135deg, #06b6d4, #22d3ee, #67e8f9); 
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent; 
+      background-clip: text;
+    }
+    
+    .neon-glow {
+      box-shadow: 0 0 20px rgba(34, 211, 238, 0.4), 0 0 40px rgba(34, 211, 238, 0.2);
+    }
+    
+    .subscription-card {
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    .subscription-card:hover {
+      transform: translateY(-8px);
+    }
+    
+    .tier-badge {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: linear-gradient(135deg, #f59e0b, #f97316);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    
+    .feature-check {
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+    }
+    
+    .access-level {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .access-public { background: #065f46; color: #10b981; }
+    .access-subscriber { background: #1e40af; color: #60a5fa; }
+    .access-premium { background: #7c2d12; color: #fb923c; }
+    .access-executive { background: #581c87; color: #c084fc; }
+    
+    .content-preview {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(34, 211, 238, 0.05));
+      border-left: 4px solid #06b6d4;
+    }
+    
+    .newsletter-template {
+      background: #f8fafc;
+      color: #1e293b;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .analytics-card {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
+      border: 1px solid rgba(34, 211, 238, 0.3);
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(34, 211, 238, 0.4); }
+      50% { box-shadow: 0 0 40px rgba(34, 211, 238, 0.8); }
+    }
+    
+    .live-indicator {
+      animation: pulse-glow 2s infinite;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100">
+  
+  <!-- Navigation -->
+  <nav class="glass sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-8">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400/20 to-cyan-600/20 grid place-items-center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-cyan-300">
+                <path d="M12 2v20M2 12h20" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <span class="font-bold text-lg">GIS Intelligence Platform</span>
+          </div>
+          
+          <div class="hidden md:flex items-center gap-6 text-sm">
+            <a href="#dashboard" class="hover:text-cyan-300 transition-colors">Dashboard</a>
+            <a href="#subscriptions" class="hover:text-cyan-300 transition-colors">Subscriptions</a>
+            <a href="#content" class="hover:text-cyan-300 transition-colors">Content Library</a>
+            <a href="#analytics" class="hover:text-cyan-300 transition-colors">Analytics</a>
+            <a href="#settings" class="hover:text-cyan-300 transition-colors">Settings</a>
+          </div>
+        </div>
+        
+        <div class="flex items-center gap-4">
+          <button class="relative p-2 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+          </button>
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600"></div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    
+    <!-- Dashboard Overview -->
+    <section id="dashboard" class="mb-16">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h1 class="text-4xl font-bold gradient-text mb-2">Intelligence Command Center</h1>
+          <p class="text-slate-400">Manage subscriptions, content delivery, and subscriber analytics</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <button onclick="showCreateContent()" class="px-6 py-3 bg-gradient-to-r from-cyan-400 to-cyan-500 text-slate-950 rounded-xl font-semibold hover:from-cyan-300 hover:to-cyan-400 transition-all">
+            + Create Content
+          </button>
+          <button onclick="sendNewsletter()" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-xl font-semibold transition-colors">
+            Send Newsletter
+          </button>
+        </div>
+      </div>
+      
+      <!-- Key Metrics -->
+      <div class="grid md:grid-cols-4 gap-6 mb-8">
+        <div class="analytics-card p-6 rounded-2xl">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-medium text-slate-400">Total Subscribers</h3>
+            <div class="w-8 h-8 rounded-lg bg-green-400/20 flex items-center justify-center">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-400">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+          </div>
+          <div class="text-3xl font-bold text-white mb-2" id="total-subscribers">2,847</div>
+          <div class="text-sm text-green-400">+12% this month</div>
+        </div>
+        
+        <div class="analytics-card p-6 rounded-2xl">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-medium text-slate-400">Premium Members</h3>
+            <div class="w-8 h-8 rounded-lg bg-purple-400/20 flex items-center justify-center">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-purple-400">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="text-3xl font-bold text-white mb-2" id="premium-members">524</div>
+          <div class="text-sm text-purple-400">18% of total</div>
+        </div>
+        
+        <div class="analytics-card p-6 rounded-2xl">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-medium text-slate-400">Monthly Revenue</h3>
+            <div class="w-8 h-8 rounded-lg bg-cyan-400/20 flex items-center justify-center">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cyan-400">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+          </div>
+          <div class="text-3xl font-bold text-white mb-2" id="monthly-revenue">$47,320</div>
+          <div class="text-sm text-cyan-400">+28% growth</div>
+        </div>
+        
+        <div class="analytics-card p-6 rounded-2xl">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-medium text-slate-400">Content Pieces</h3>
+            <div class="w-8 h-8 rounded-lg bg-orange-400/20 flex items-center justify-center">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-orange-400">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <path d="M14 2v6h6"/>
+              </svg>
+            </div>
+          </div>
+          <div class="text-3xl font-bold text-white mb-2" id="content-pieces">1,203</div>
+          <div class="text-sm text-orange-400">+15 this week</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Subscription Management -->
+    <section id="subscriptions" class="mb-16">
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="text-3xl font-bold">Subscription Tiers</h2>
+        <button onclick="addNewTier()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg font-medium transition-colors">
+          + Add Tier
+        </button>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Free Tier -->
+        <div class="subscription-card glass p-6 rounded-2xl relative">
+          <div class="tier-badge bg-green-500">FREE</div>
+          <div class="mb-6">
+            <h3 class="text-xl font-bold mb-2">Echo Observer</h3>
+            <div class="text-3xl font-bold mb-2">$0<span class="text-lg text-slate-400">/month</span></div>
+            <p class="text-slate-400 text-sm">Public intelligence updates</p>
+          </div>
+          
+          <div class="space-y-3 mb-6">
+            <div class="flex items-center text-sm">
+              <div class="feature-check">
+                <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              Weekly Echo Reports
+            </div>
+            <div class="flex items-center text-sm">
+              <div class="feature-check">
+                <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              Public accuracy tracking
+            </div>
+            <div class="flex items-center text-sm">
+              <div class="feature-check">
+                <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              Basic signal alerts
+            </div>
+          </div>
+          
+          <div class="text-center text-slate-500 text-sm mb-4">
+            <span id="free-subscribers">1,847</span> subscribers
+          </div>
+          
+          <button class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded-xl font-medium transition-colors">
+            Manage Free Tier
+          </button>
+        </div>
+        
+        <!-- DriftCodex Subscriber -->
+        <div class="subscription-card glass p-6 rounded-2xl relative neon-glow">
+          <div class="tier-badge">POPULAR</div>
+          <div class="mb-6">
+            <h3 class="text-xl font-bold mb-2">DriftCodex Subscriber</h3>
+            <div class="text-3xl font-bold mb-2">$29<span class="text-lg text-slate-400">/month</span></div>
+            <p class="text-slate-400 text-sm">Full intelligence access</p>
+          </div>
+          
+          <div class="space-y-3 mb-6">
+            <div class="flex items-center text-sm">
+              <div class="feature-check">
+                <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              Everything in Echo Observer
+            </div>
+            <div class="flex items-center text-sm">
+              <div class="feature-check">
+                <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              Private DriftCodex™ access
+            </div>
+            <div class="flex items-center text-sm">
+              <div class="feature-check">
+                <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              Bi-weekly intelligence briefs
+            </div>
+            <div class="flex items-center text-sm">
+              <div class="feature-check">
+                <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              Early prediction access
+            </div>
+          </div>
+          
+          <div class="text-center text-cyan-400 text-sm mb-4">
+            <span id="subscriber-count">743</span> subscribers
+          </div>
+          
+          <button class="w-full py-3 bg-gradient-to-r from-cyan-400 to-cyan-500 text-slate-950 rounded-xl font-semibold hover:from-cyan-300 hover:to-cyan-400 transition-all">
+            Manage Subscribers
+          </button>
+        </div>
+        
+        <!-- Foresight Premium -->
+        <div class="subscription-card glass p-6 rounded-2xl relative">
+          <div class="tier-badge bg-purple-500">PREMIUM</div>
+          <div class="mb-6">
+            <h3 class="text-xl font-bold mb-2">Foresight Premium</h3>
+            <div class="text-3xl font-bold mb-2">$99<span class="text-lg text-slate-400">/month</span></div>
+            <p class="text-slate-400 text-sm">Advanced intelligence suite</p>
+          </div>
+          
+          <div class="space-y-3 mb-6">
+            <div class="flex items-center text-sm">
+              <div class="feature-check">
+                <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              Everything in DriftCodex
+            </div>
+            <div class="flex items-center text-sm">
+              <div class="feature-check">
+                <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              Weekly sector deep-dives
+            </div>
+            <div class="flex items-center text-sm">
+              <div class="feature-check">
+                <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              Validation timestamps
+            </div>
+            <div class="flex items-center text-sm">
+              <div class="feature-check">
+                <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              Direct analyst access
+            </div>
+          </div>
+          
+          <div class="text-center text-purple-400 text-sm mb-4">
+            <span id="premium-count">214</span> subscribers
+          </div>
+          
+          <button class="w-full py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl font-semibold hover:from-purple-400 hover:to-purple-500 transition-all">
+            Manage Premium
+          </button>
+        </div>
+        
+        <!-- Executive Intelligence -->
+        <div class="subscription-card glass p-6 rounded-2xl relative">
+          <div class="tier-badge bg-amber-500">EXECUTIVE</div>
+          <div class="mb-6">
+            <h3 class="text-xl font-bold mb-2">Executive Intelligence</h3>
+            <div class="text-3xl font-bold mb-2">$499<span class="text-lg text-slate-400">/month</span></div>
+            <p class="text-slate-400 text-sm">C-suite intelligence briefings</p>
+          </div>
+          
+          <div class="space-y-3 mb-6">
+            <div class="flex items-center text-sm">
+              <div class="feature-check">
+                <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              Everything in Premium
+            </div>
+            <div class="flex items-center text-sm">
+              <div class="feature-check">
+                <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              Custom executive reports
+            </div>
+            <div class="flex items-center text-sm">
+              <div class="feature-check">
+                <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              Private briefing calls
+            </div>
+            <div class="flex items-center text-sm">
+              <div class="feature-check">
+                <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              24/7 intelligence support
+            </div>
+          </div>
+          
+          <div class="text-center text-amber-400 text-sm mb-4">
+            <span id="executive-count">43</span> subscribers
+          </div>
+          
+          <button class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 rounded-xl font-semibold hover:from-amber-400 hover:to-amber-500 transition-all">
+            Manage Executive
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Content Library Management -->
+    <section id="content" class="mb-16">
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="text-3xl font-bold">Content Library</h2>
+        <div class="flex gap-3">
+          <select id="content-filter" class="px-4 py-2 bg-slate-800 rounded-lg text-sm">
+            <option value="all">All Content</option>
+            <option value="public">Public</option>
+            <option value="subscriber">Subscriber Only</option>
+            <option value="premium">Premium</option>
+            <option value="executive">Executive</option>
+          </select>
+          <button onclick="showContentEditor()" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg font-medium transition-colors">
+            + Create Content
+          </button>
+        </div>
+      </div>
+      
+      <!-- Content Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="content-grid">
+        <!-- Sample Content Items -->
+        <div class="content-item glass p-6 rounded-2xl" data-access="public">
+          <div class="flex items-center justify-betwe
